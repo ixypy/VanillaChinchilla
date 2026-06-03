@@ -96,6 +96,7 @@ EDIT_GENERAL_MENUS = { -- sub-menus within the "Edit Notes (General)" menu
     "Shift Notes Up/Down",
     "Shift Notes Left/Right",
     "Switch Note Lanes",
+    "Switch Note Types",
     "Flip Notes Vertically",
     "Scale Note Spacing",
     "Shear Lane Positions"
@@ -329,6 +330,7 @@ function editNotesGeneralMenu()
     if currentMenu == "Shift Notes Up/Down" then shiftNotesVerticallyMenu() end
     if currentMenu == "Shift Notes Left/Right" then shiftNotesHorizontallyMenu() end
     if currentMenu == "Switch Note Lanes" then switchNoteLanesMenu() end
+    if currentMenu == "Switch Note Types" then switchNoteTypesMenu() end
     if currentMenu == "Flip Notes Vertically" then flipNotesVerticallyMenu() end
     if currentMenu == "Scale Note Spacing" then scaleNoteSpacingMenu() end
     if currentMenu == "Shear Lane Positions" then shearLanePositionsMenu() end
@@ -392,6 +394,10 @@ function switchNoteLanesMenu()
     local minimumNotes = 1
     simpleActionMenu(buttonText, minimumNotes, switchNoteLanes, nil, settingVars)
     showSwappingLane(settingVars)
+end
+
+function switchNoteTypesMenu()
+    simpleActionMenu("Switch types of selected notes", 1, switchNoteTypes, nil, nil)
 end
 
 -- Creates the "Flip Notes Vertically" menu
@@ -648,6 +654,18 @@ function switchNoteLanes(settingVars)
     for _, note in pairs(notesToRemove) do
         local newLane = oldLaneToNewLane[note.Lane]
         addNoteToList(notesToAdd, note, nil, newLane, nil, nil, nil)
+    end
+    removeAndAddNotes(notesToRemove, notesToAdd)
+end
+
+-- Switches the types of selected notes
+function switchNoteTypes()
+    local notesToAdd = {}
+    local notesToRemove = state.SelectedHitObjects
+    for _, note in pairs(notesToRemove) do
+        local newType
+        if note.Type == 1 then newType = 0 else newType = 1 end
+        addNoteToList(notesToAdd, note, nil, nil, nil, nil, nil, newType)
     end
     removeAndAddNotes(notesToRemove, notesToAdd)
 end
@@ -1266,6 +1284,11 @@ function addNoteToList(noteList, defaultNote, startTime, lane, endTime, hitSound
     local newHitSound = hitSound or defaultNote.HitSound
     local newEditorLayer = editorLayer or defaultNote.EditorLayer
     local newType = type or defaultNote.type
+    if newType == "Normal" then
+        newType = "Mine"
+    elseif newType == "Mine" then
+        newType = "Normal"
+    end
     local newNote = utils.CreateHitObject(newStartTime, newLane, newEndTime,
         newHitSound, newEditorLayer, newType)
     table.insert(noteList, newNote)

@@ -14,6 +14,7 @@ Here's all the features of the plugin so far:
 - Shift Notes Up/Down
 - Shift Notes Left/Right
 - Switch Note Lanes
+- Switch Note Types
 - Flip Notes Vertically
 - Scale Note Spacing
 - Shear Lane Positions

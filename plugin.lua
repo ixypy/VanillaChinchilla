@@ -1258,6 +1258,7 @@ end
 --    endTime     : new end offset (milliseconds) of the note to add [Int(/Float?)]
 --    hitSound    : new hitsound of the note to add [Quaver HitSound]
 --    editorLayer : new editor layer of the note to add [Quaver EditorLayer]
+--    type        : new type of the note to add [Quaver HitObjectType]
 function addNoteToList(noteList, defaultNote, startTime, lane, endTime, hitSound, editorLayer, type)
     local newStartTime = startTime or defaultNote.StartTime
     local newLane = lane or defaultNote.Lane
